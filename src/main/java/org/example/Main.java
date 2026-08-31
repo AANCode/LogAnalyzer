@@ -8,7 +8,6 @@ import java.util.*;
 public class Main {
     public static void main(String[] args){
 
-
         Scanner scanner = new Scanner(System.in);
 
         //C:\Users\iamdu\Documents\test.txt
@@ -40,18 +39,34 @@ public class Main {
                     errorLogs.add(logLine);
                 }
             }
-            for (LogEntry error : errorLogs){
-                String errorMessage = error.getMessage();
-                System.out.println(errorMessage);
-            }
-
 
             Map<String, Integer> levelCounts = new HashMap<>();
             for (LogEntry logLine : logEntries){
                 String level = logLine.getLevel();
                 levelCounts.put(level, levelCounts.getOrDefault(level, 0)+1);
             }
-            System.out.println(levelCounts);
+
+            int valg = -1;
+            while (valg != 0){
+
+                showMenu();
+                valg = Integer.parseInt(scanner.nextLine());
+
+                switch(valg){
+                    case 1:
+                    {
+                        System.out.println(error.getMessage());
+                        break;
+                    }
+
+                    case 2:
+                    {
+                        System.out.println(levelCounts);
+                        break;
+                    }
+                }
+
+            }
 
         } catch (IOException e){
             System.out.println("tekst filen finnes ikke");
@@ -59,5 +74,13 @@ public class Main {
         }
 
 
+
+    }
+
+    public static void showMenu(){
+        System.out.println("***** Velg opgave du vil utføre ***** \n " +
+                "1. Show ERROR logs \n" +
+                "2. Show statistics \n" +
+                "0. Exit");
     }
 }
