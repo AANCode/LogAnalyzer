@@ -55,7 +55,9 @@ public class Main {
                 switch(valg){
                     case 1:
                     {
-                        System.out.println(error.getMessage());
+                        for (LogEntry error : errorLogs){
+                            System.out.println(error.getMessage());
+                        }
                         break;
                     }
 
