@@ -3,13 +3,10 @@ package org.example;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args){
-
 
         Scanner scanner = new Scanner(System.in);
 
@@ -22,11 +19,11 @@ public class Main {
 
             List<String> lines = Files.readAllLines(path);
             List<LogEntry> logEntries = new ArrayList<>();
-            int countLines = lines.size();
-            System.out.println("Loaded " + countLines + " log lines.");
+            int lineCount = lines.size();
+            System.out.println("Loaded " + lineCount + " log lines.");
 
-            for (String logs: lines){
-                String[] parts = logs.split(" ", 4);
+            for (String logLine: lines){
+                String[] parts = logLine.split(" ", 4);
                 String date = parts[0];
                 String time = parts[1];
                 String level = parts[2].replace("[","").replace("]","");
@@ -34,29 +31,58 @@ public class Main {
 
                 LogEntry entry = new LogEntry(date,time,level,message);
                 logEntries.add(entry);
-                /*System.out.println("Date: " + date + "\n" +
-                        "Time: " + time + "\n" +
-                        "Level: " + level + "\n" +
-                        "Message: " + message);*/
             }
 
             List<LogEntry> errorLogs = new ArrayList<>();
-            for (LogEntry log : logEntries){
-                if (log.getLevel().equals("ERROR")){
-                    errorLogs.add(log);
+            for (LogEntry logLine : logEntries){
+                if (logLine.getLevel().equals("ERROR")){
+                    errorLogs.add(logLine);
                 }
             }
-            for (LogEntry error : errorLogs){
-                String errorMessage = error.getMessage();
-                System.out.println(errorMessage);
+
+            Map<String, Integer> levelCounts = new HashMap<>();
+            for (LogEntry logLine : logEntries){
+                String level = logLine.getLevel();
+                levelCounts.put(level, levelCounts.getOrDefault(level, 0)+1);
             }
-            System.out.println(errorLogs.size());
-            System.out.println(logEntries.size());
+
+            int valg = -1;
+            while (valg != 0){
+
+                showMenu();
+                valg = Integer.parseInt(scanner.nextLine());
+
+                switch(valg){
+                    case 1:
+                    {
+                        for (LogEntry error : errorLogs){
+                            System.out.println(error.getMessage());
+                        }
+                        break;
+                    }
+
+                    case 2:
+                    {
+                        System.out.println(levelCounts);
+                        break;
+                    }
+                }
+
+            }
+
         } catch (IOException e){
             System.out.println("tekst filen finnes ikke");
 
         }
 
 
+
+    }
+
+    public static void showMenu(){
+        System.out.println("***** Velg opgave du vil utføre ***** \n " +
+                "1. Show ERROR logs \n" +
+                "2. Show statistics \n" +
+                "0. Exit");
     }
 }
